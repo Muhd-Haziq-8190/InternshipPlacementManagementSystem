@@ -44,7 +44,8 @@ public class Internship {
     public boolean isOpenFor(Student s) {
         if (!this.visibility) {
         	return false;
-        } 
+        }
+
         if (!status.equalsIgnoreCase("Approved")) {
         	return false;
         }
@@ -66,6 +67,7 @@ public class Internship {
         return slotsAvailable > 0;
     }
     
+    
 	public void addApplication(InternshipApplication appli) {
         if (this.applicationCount < this.internAppli.length) {
             internAppli[this.applicationCount++] = appli;
@@ -81,6 +83,10 @@ public class Internship {
         	status = "Filled";
         }
     }
+	
+	
+	// --------- GETTER & SETTER --------- //
+
 	
     
 	public String getId() {
@@ -121,6 +127,10 @@ public class Internship {
     
     public void toggleVisibility() {
     	this.visibility= !this.visibility; 
+    }
+    
+    public InternshipApplication[] getInternshipApplications() {
+    	return this.internAppli;
     }
 
     
