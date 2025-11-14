@@ -3,11 +3,12 @@ package Project;
 public class InternshipApplication  {
 	private static int idCounter = 1;	 // counter for unique Internship Application IDs
 	
-	protected String id;
-	protected Student student;
-	protected Internship internship;
-	protected String status;		// Pending, Successful, Unsuccessful
-	protected boolean accepted; 	// checks current internship application has been accepted by student
+	private String id;
+	private Student student;
+	private Internship internship;
+	private String status;		// Pending, Successful, Unsuccessful
+	private boolean accepted; 	// checks current internship application has been accepted by student
+	private boolean withdrawalRequested;
 	
 	public InternshipApplication(Student student, Internship internship) {
 		this.id = "APP" + (idCounter++);
@@ -15,6 +16,7 @@ public class InternshipApplication  {
 		this.internship = internship;
 		this.accepted = false;			// application is defaulted to not being accepted yet
 		this.status = "Pending";		// defaults to "Pending"
+		this.withdrawalRequested = false;
 	}
 	
 	public boolean acceptPlacement() {
@@ -51,7 +53,9 @@ public class InternshipApplication  {
 		return false;
 	}
 	
-	
+	public void setWithdrawalRequested(boolean isWithdraw) {
+		this.withdrawalRequested = isWithdraw;
+	}
 	
 	
 	// --------- GETTER & SETTER --------- //
@@ -59,16 +63,28 @@ public class InternshipApplication  {
 	public String getId() {
 		return this.id;
 	}
+
+	public Student getStudent() {
+		return this.student;
+	}
+	
+	public Internship getInternship() {
+		return this.internship;
+	}
+	
 	
 	public String getStatus() {
 		return this.status;
 	}
 	
+	
 	public void setStatus(String status) {
 		this.status = status;
 	}
 	
+	public boolean isWithdrawalRequested() {
+		return this.withdrawalRequested;
+	}
 
-	
 	
 }

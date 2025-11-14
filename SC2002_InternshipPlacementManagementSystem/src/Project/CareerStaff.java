@@ -1,7 +1,7 @@
 package Project;
 
 public class CareerStaff extends User{
-	protected String department;
+	private String department;
 	
 	public CareerStaff(String id, String name, String department) {
 		super(id, name);
@@ -19,5 +19,30 @@ public class CareerStaff extends User{
 	public boolean authorizeCompanyRepresentativeCreation(CompanyRepresentative companyRep, boolean approve) {
 		companyRep.setAccountStatus(approve ? "Approved" : "Rejected");
 		return true;
+	}
+	
+	public void approveWithdrawal(Student student, InternshipApplication application) {
+		Internship internship = application.getInternship();
+		
+		// if student already accepted this internship, undo acceptance
+		if(student.getAcceptedPlacement() == application) {
+			student.setAcceptedPlacement(null);
+			internship.releaseSlot();
+		}
+		
+		// withdrawal approved, remove it from student's application list
+		student.removeApplication(application);
+		internship.removeApplication(application);
+		application.setWithdrawalRequested(false);
+	}
+	
+	public void rejectWithdrawal(InternshipApplication application) {
+		application.setWithdrawalRequested(false);
+	}
+	
+	// --------- GETTER & SETTER --------- //
+
+	public String getDepartment() {
+		return this.department;
 	}
 }

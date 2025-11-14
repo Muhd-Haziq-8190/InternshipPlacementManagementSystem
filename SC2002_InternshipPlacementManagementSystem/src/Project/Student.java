@@ -1,12 +1,12 @@
 package Project;
 
 public class Student extends User {
-	protected String major;
-	protected int yearOfStudy;
-	protected String email;
-	protected InternshipApplication[] internAppli;
-	protected int applicationCount;
-	protected InternshipApplication acceptedPlacement;
+	private String major;
+	private int yearOfStudy;
+	private String email;
+	private InternshipApplication[] internAppli;
+	private int applicationCount;
+	private InternshipApplication acceptedPlacement;
 	
 	public Student(String userId, String name, int yearOfStudy, String major, String email) {
 		super(userId, name);
@@ -62,7 +62,7 @@ public class Student extends User {
 	
 		if(internAppli.length != 0) {
 			for(int i = 0; i < internAppli.length; i++) {
-				System.out.printf("%s, %s\n", internAppli[i].internship.getTitle(), internAppli[i].internship.getCompanyName());
+				System.out.printf("%s, %s\n", internAppli[i].getInternship().getTitle(), internAppli[i].getInternship().getCompanyName());
 			}
 		}
 	
@@ -81,9 +81,27 @@ public class Student extends User {
 				break;
 			}
 		}
-	
 	}
 	
+	public boolean requestWithdrawal(InternshipApplication application) {
+		// ensure that application student wants to withdraw exists
+		boolean owns = false;
+		for(int i = 0; i < this.applicationCount; i++) {
+			if(this.internAppli[i] == application) {
+				owns = true;
+				break;
+			}
+		}
+		
+		// if does not exist, return false
+		if(!owns) {
+			return false; 
+		}
+		
+		// request a withdrawal for given application
+		application.setWithdrawalRequested(true);
+		return true;
+	}
 	
 	
 	// --------- GETTER & SETTER --------- //

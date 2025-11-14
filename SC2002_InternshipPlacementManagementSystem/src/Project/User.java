@@ -1,9 +1,9 @@
 package Project;
 
-public class User {
-	protected String userId;
-	protected String name;
-	protected String password;
+public abstract class User {
+	private String userId;
+	private String name;
+	private String password;
 	
 	public User(String userId, String name) {
 		this.userId = userId;
@@ -26,7 +26,7 @@ public class User {
 		// 3) New password is not an empty string
 		
 		if(this.checkPassword(oldPass) && newPass != null && !newPass.isEmpty()) {
-			this.password = newPass;
+			this.setPassword(newPass);
 			return true;
 		}
 		return false;

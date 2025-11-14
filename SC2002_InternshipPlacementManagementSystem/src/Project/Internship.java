@@ -4,20 +4,20 @@ import java.time.LocalDate;
 
 
 public class Internship {
-	protected int idCounter= 1;		// counter for unique Internship IDs
+	private int idCounter= 1;		// counter for unique Internship IDs
 	
-	protected String id;
-	protected String title;
-	protected String description;
-	protected String level;			// 1. Basic, 2. Intermediate, 3. Advanced
-	protected String preferredMajor;
-	protected LocalDate openDate;
-	protected LocalDate closeDate;
-	protected String status;		// Pending, Approved, Rejected, Fiiled
-	protected String companyName;
-	protected CompanyRepresentative companyRep;
-	protected int slotsAvailable; 	// can only accept a max of 10 students
-	protected boolean visibility;
+	private String id;
+	private String title;
+	private String description;
+	private String level;			// 1. Basic, 2. Intermediate, 3. Advanced
+	private String preferredMajor;
+	private LocalDate openDate;
+	private LocalDate closeDate;
+	private String status;		// Pending, Approved, Rejected, Fiiled
+	private String companyName;
+	private CompanyRepresentative companyRep;
+	private int slotsAvailable; 	// can only accept a max of 10 students
+	private boolean visibility;
 	
     private InternshipApplication[] internAppli = new InternshipApplication[30];		// only allowing a max of 30 students to apply, 30 being an arbitrary number
     private int applicationCount = 0;													// checks how many students have currently applied
@@ -81,10 +81,27 @@ public class Internship {
 		// add a new application
         if (this.applicationCount < this.internAppli.length) {
             internAppli[this.applicationCount++] = appli;
-        }
-        
-        
+        }   
     }
+	
+	public void removeApplication(InternshipApplication application) {
+		
+		//loop through all applications to find target application
+	    for (int i = 0; i < this.applicationCount; i++) {
+	        if (this.internAppli[i] == application) {
+	        	
+	            // shift remaining applications left to "replace and remove" target application 
+	            for (int j = i; j < this.applicationCount - 1; j++) {
+	            	this.internAppli[j] = this.internAppli[j + 1];
+	            }
+	            
+	            // decrement application count
+	            // clear last ref
+	            this.internAppli[--this.applicationCount] = null;
+	            break;
+	        }
+	    }
+	}
 	
 	public void confirmSlot() {
 		// once slot is confirmed, reduce current available slots
@@ -97,6 +114,16 @@ public class Internship {
         	status = "Filled";
         }
     }
+	
+	// add back the additional slot if application is withdrawn
+	public void releaseSlot() {
+		if(this.getSlotsAvailable() < 10) {
+			this.slotsAvailable++;
+			if(this.getStatus().equals("Filled")) {
+				this.setStatus("Approved");
+			}
+		}
+	}
 	
 	// --------- GETTER & SETTER --------- //
     
@@ -120,8 +147,8 @@ public class Internship {
     	return this.status;
     }
     
-    public void setStatus(String s) {
-    	status = s;
+    public void setStatus(String status) {
+    	this.status = status;
     }
     
     public int getSlotsAvailable() {
@@ -143,9 +170,5 @@ public class Internship {
     public InternshipApplication[] getInternshipApplications() {
     	return this.internAppli;
     }
-
-    
-    
-	
 
 }

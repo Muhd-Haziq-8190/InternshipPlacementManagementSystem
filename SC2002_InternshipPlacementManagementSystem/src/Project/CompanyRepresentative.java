@@ -3,11 +3,12 @@ package Project;
 import java.time.LocalDate;
 
 public class CompanyRepresentative extends User{
-	protected String companyName;
-	protected String department;
-	protected String position;
-	protected String accountStatus;
-	protected Internship[] internships;
+	private String companyName;
+	private String department;
+	private String position;
+	private String accountStatus;
+	private Internship[] internships;
+	private int internshipCount;
 
 	public CompanyRepresentative(String userId, String name, String companyName, String department, String position) {
 		super(userId, name);
@@ -16,19 +17,30 @@ public class CompanyRepresentative extends User{
 		this.position= position;
 		this.accountStatus = "Pending";
 		this.internships = new Internship[5];
-
+		this.internshipCount = 0;
 	}
 	
 	
 	public Internship createInternship(String title, String description, String level, String preferredMajor, LocalDate openDate, LocalDate closeDate, int slotsAvailable) {
 		
-		// If company representative already created 5 internships, don't allow any more creation
-		// On GUI side, if return type is null, display error message, else proceed
-		if(this.internships.length == 5) {
+	    
+	    // If company representative already created 5 internships, don't allow any more creation
+	 	// On GUI side, if return type is null, display error message, else proceed
+	 	// Count current internships
+		if(this.internshipCount >= 5) {
 			return null;
 		}	
 		
 		Internship internship = new Internship(title, description, level, preferredMajor, openDate, closeDate, this.companyName, this, slotsAvailable);
+		
+		// add new internship to the first available spot in internships[]
+		for (int i = 0; i < this.internships.length; i++) {
+	        if (this.internships[i] == null) {
+	            this.internships[i] = internship;
+	            this.internshipCount++;  // increment count after adding
+	            break;
+	        }
+	    }
 		return internship;
 	}
 	
