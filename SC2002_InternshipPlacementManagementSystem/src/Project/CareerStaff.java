@@ -1,10 +1,12 @@
 package Project;
 
 public class CareerStaff extends User{
+	private String role;
 	private String department;
 	
-	public CareerStaff(String id, String name, String department) {
-		super(id, name);
+	public CareerStaff(String id, String name, String role, String department) {
+		super(id, name);		// userId is their email
+		this.role = role;
 		this.department = department;
 	}
 	
@@ -45,4 +47,17 @@ public class CareerStaff extends User{
 	public String getDepartment() {
 		return this.department;
 	}
+	
+	public String getRole() {
+		return this.role;
+	}
+	
+	public void setRole(String role) {
+		this.role = role;
+	}
+
+	public void setDepartment(String department) {
+		this.department = department;
+	}
+	
 }

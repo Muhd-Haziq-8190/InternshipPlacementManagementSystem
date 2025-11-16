@@ -4,10 +4,11 @@ public class InternshipApplication  {
 	private static int idCounter = 1;	 // counter for unique Internship Application IDs
 	
 	private String id;
+	private String studentId;
 	private Student student;
 	private Internship internship;
 	private String status;		// Pending, Successful, Unsuccessful
-	private boolean accepted; 	// checks current internship application has been accepted by student
+	private boolean accepted; 	// checks if current internship application has been accepted by student
 	private boolean withdrawalRequested;
 	
 	public InternshipApplication(Student student, Internship internship) {
@@ -17,6 +18,37 @@ public class InternshipApplication  {
 		this.accepted = false;			// application is defaulted to not being accepted yet
 		this.status = "Pending";		// defaults to "Pending"
 		this.withdrawalRequested = false;
+	}
+	
+	public InternshipApplication(String id, Student student, Internship internship, String status, boolean accepted, boolean withdrawalRequested) {
+		this.id = id;
+		this.student = student;
+		this.internship = internship;
+		this.accepted = accepted;			
+		this.status = status;		
+		this.withdrawalRequested = withdrawalRequested;
+		
+		// --- UPDATE ID COUNTER SO NEW IDS DON'T CLASH ---
+	    int numeric = Integer.parseInt(id.replace("APP", ""));
+	    if (numeric >= idCounter) {
+	        idCounter = numeric + 1;
+	    }
+	}
+	
+	public InternshipApplication(String id, String studentId, Internship internship, String status, boolean accepted, boolean withdrawalRequested) {
+		this.id = id;
+		this.student = null;
+		this.studentId = studentId;
+		this.internship = internship;
+		this.accepted = accepted;			
+		this.status = status;		
+		this.withdrawalRequested = withdrawalRequested;
+		
+		// --- UPDATE ID COUNTER SO NEW IDS DON'T CLASH ---
+	    int numeric = Integer.parseInt(id.replace("APP", ""));
+	    if (numeric >= idCounter) {
+	        idCounter = numeric + 1;
+	    }
 	}
 	
 	public boolean acceptPlacement() {
@@ -35,7 +67,7 @@ public class InternshipApplication  {
 			
 			// loop through all current student's applications
 			for(InternshipApplication app : applications) {
-				
+				if (app == null) continue; 
 				// each student can only accept one internship
 				// set status of all applications aside from the accepted one to "Unsuccessful"
 				if(!app.getId().equals(this.id)) {
@@ -80,6 +112,14 @@ public class InternshipApplication  {
 	
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	
+	public void setStudent(Student student) {
+		this.student = student;
+	}
+	
+	public boolean isAccepted() {
+		return this.accepted;
 	}
 	
 	public boolean isWithdrawalRequested() {

@@ -1,6 +1,7 @@
 package Project;
 
 public class Student extends User {
+	
 	private String major;
 	private int yearOfStudy;
 	private String email;
@@ -8,16 +9,30 @@ public class Student extends User {
 	private int applicationCount;
 	private InternshipApplication acceptedPlacement;
 	
+	// use on creation of student
 	public Student(String userId, String name, int yearOfStudy, String major, String email) {
 		super(userId, name);
 		this.major = major;
 		this.yearOfStudy = yearOfStudy;
 		this.email = email;
-		acceptedPlacement = null;
-		applicationCount = 0;
-		internAppli = new InternshipApplication[3];			// Each student can only apply to 3 internships
-		InternshipApplication acceptedPlacement = null;		// default is null, student must accept an internship first
+		this.acceptedPlacement = null;
+		this.applicationCount = 0;
+		this.internAppli = new InternshipApplication[3];			// Each student can only apply to 3 internships
+		this.acceptedPlacement = null;									// default is null, student must accept an internship first
 	}
+	
+	// use when retrieveing from .csv
+	public Student(String userId, String name, int yearOfStudy, String major, String email, InternshipApplication[] internAppli, int applicationCount, InternshipApplication acceptedPlacement) {
+		super(userId, name);
+		this.major = major;
+		this.yearOfStudy = yearOfStudy;
+		this.email = email;
+		this.acceptedPlacement = acceptedPlacement;
+		this.applicationCount = applicationCount;
+		this.internAppli = internAppli;												// Each student can only apply to 3 internships
+		this.acceptedPlacement = acceptedPlacement;									// default is null, student must accept an internship first
+	}
+	
 	
 	
 	// checks if student has already accepted an internship
@@ -40,11 +55,14 @@ public class Student extends User {
 		// can only apply for max 3 internships
 		// does not apply if at capacity
 		if(this.applicationCount >= 3) {
+			System.out.println("Student Class, applyTo() method: applicationCount >= 3");
 			return false;
+			
 		}
 		
 		// internship is not open or student is not eligible
 		if(!internship.isOpenFor(this)) {
+//			System.out.println("Student Class, isOpenFor() method: Student not eligible");
 			return false;
 		}
 		
@@ -103,6 +121,32 @@ public class Student extends User {
 		return true;
 	}
 	
+	public String getApplicationIds() {
+        
+        // final string applicationIDs should append to
+        String applicationIds;
+        
+        // if no internships
+        if (internAppli == null || internAppli.length == 0) {
+        	applicationIds = "";   
+        } else {
+        	// if have internships
+        	
+            // filter out null entries
+        	// join existing entries with |  ie. INT001|INT002
+            StringBuilder sb = new StringBuilder();
+            for (InternshipApplication appli : internAppli) {
+                if (appli != null && !appli.getId().trim().isEmpty()) {
+                    if (sb.length() > 0) {sb.append("|");}
+                    sb.append(appli.getId());
+                }
+            }
+            applicationIds = sb.toString();
+        }
+        
+        return applicationIds;
+	}
+	
 	
 	// --------- GETTER & SETTER --------- //
 	
@@ -110,6 +154,10 @@ public class Student extends User {
 	public InternshipApplication[] getInternshipApplications() {
         return this.internAppli;
     }
+	
+	public int getApplicationCount() {
+		return this.applicationCount;
+	}
 	
 	public String getMajor() {
 		return this.major;
@@ -127,7 +175,7 @@ public class Student extends User {
 		return this.acceptedPlacement;
 	}
 	
-	void setAcceptedPlacement(InternshipApplication application) {
+	public void setAcceptedPlacement(InternshipApplication application) {
 		this.acceptedPlacement = application;
 	}
 	
