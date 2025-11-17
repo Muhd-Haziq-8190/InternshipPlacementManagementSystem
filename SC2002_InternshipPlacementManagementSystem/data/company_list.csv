@@ -1,0 +1,3 @@
+CompanyRepID,Company,Name,Department,Position,Status,InternshipIDs,InternshipCount
+alice@google.com,Google,Alice,Tech,Lead Engineer,Approved,INT1,1
+bob@amazon.com,Amazon,Bob,Tech,HR Manager,Approved,INT2|INT3,2

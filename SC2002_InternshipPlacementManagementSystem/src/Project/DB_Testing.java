@@ -9,6 +9,11 @@ import Project.DataReader.*;
 import java.time.LocalDate;
 
 public class DB_Testing {
+	CompanyListReader companyDb = new CompanyListReader("data", "company_list.csv");
+    InternshipListReader internshipDb = new InternshipListReader("data", "internship_list.csv");
+    InternshipApplicationListReader appDb = new InternshipApplicationListReader("data", "internshipApplication_list.csv");
+    StaffListReader staffDb = new StaffListReader("data", "staff_list.csv");
+    StudentListReader studentDb = new StudentListReader("data", "student_list.csv");
 
     public static void main(String[] args) {
 
@@ -62,11 +67,26 @@ public class DB_Testing {
                 3
         );
         
+        Internship i3 = rep2.createInternship(
+                "IT FISHING ESCAPADE",
+                "Maintain AI Fishin Software",
+                "Intermediate",
+                "Information Systems",
+                LocalDate.now().minusDays(3),
+                LocalDate.now().plusDays(25),
+                3
+        );
+        
         i1.setStatus("Approved");
         i2.setStatus("Approved");
+        i3.setStatus("Approved");
 
         internshipDb.insert(i1);
         internshipDb.insert(i2);
+        internshipDb.insert(i3);
+        
+        companyDb.update(rep1);
+        companyDb.update(rep2);
 
         // ----------------------------
         // Create Students
@@ -88,31 +108,6 @@ public class DB_Testing {
         internshipDb.update(i1);
         internshipDb.update(i2);
 
-        // ----------------------------
-        // TEST FIND METHODS
-        // ----------------------------
-        System.out.println("\n=== Find CareerStaff by Department ===");
-        CareerStaff foundStaff = staffDb.findCareerStaff("Department", "Career Office");
-        if (foundStaff != null) System.out.println("Found Staff: " + foundStaff.getName());
-
-        System.out.println("\n=== Find CompanyRepresentative by Email ===");
-        CompanyRepresentative foundRep = companyDb.findCompanyRepresentative("Email", "alice@google.com");
-        if (foundRep != null) System.out.println("Found Rep: " + foundRep.getName() + " at " + foundRep.getCompanyName());
-
-        System.out.println("\n=== Find Internship by Title ===");
-        Internship foundInternship = internshipDb.findInternship("Title", "Software Engineering Intern");
-        if (foundInternship != null)
-            System.out.println("Found Internship: " + foundInternship.getTitle() + " by " + foundInternship.getCompanyName());
-
-        System.out.println("\n=== Find Student by ID ===");
-        Student foundStudent = studentDb.findStudent("StudentID", "U1234567A");
-        if (foundStudent != null) System.out.println("Found Student: " + foundStudent.getName() + ", Applied to: " + foundStudent.getApplicationIds());
-
-        System.out.println("\n=== Find InternshipApplication by ID ===");
-        // Retrieve the first application id from the student
-        String firstAppId = foundStudent.getInternshipApplications()[0].getId();
-        var foundApp = appDb.findInternshipApplication("InternshipApplicationID", firstAppId);
-        if (foundApp != null)
-            System.out.println("Found Application: " + foundApp.getId() + ", Student: " + foundApp.getStudent().getName() + ", Internship: " + foundApp.getInternship().getTitle());
     }
+
 }

@@ -4,12 +4,15 @@ public class InternshipApplication  {
 	private static int idCounter = 1;	 // counter for unique Internship Application IDs
 	
 	private String id;
-	private String studentId;
 	private Student student;
 	private Internship internship;
 	private String status;		// Pending, Successful, Unsuccessful
 	private boolean accepted; 	// checks if current internship application has been accepted by student
 	private boolean withdrawalRequested;
+	
+	// foreign keys
+	private String studentId;
+	private String internshipId;
 	
 	public InternshipApplication(Student student, Internship internship) {
 		this.id = "APP" + (idCounter++);
@@ -24,6 +27,21 @@ public class InternshipApplication  {
 		this.id = id;
 		this.student = student;
 		this.internship = internship;
+		this.accepted = accepted;			
+		this.status = status;		
+		this.withdrawalRequested = withdrawalRequested;
+		
+		// --- UPDATE ID COUNTER SO NEW IDS DON'T CLASH ---
+	    int numeric = Integer.parseInt(id.replace("APP", ""));
+	    if (numeric >= idCounter) {
+	        idCounter = numeric + 1;
+	    }
+	}
+	
+	public InternshipApplication(String id, String studentId, String internshipId, String status, boolean accepted, boolean withdrawalRequested) {
+		this.id = id;
+		this.studentId = studentId;
+		this.internshipId = internshipId;
 		this.accepted = accepted;			
 		this.status = status;		
 		this.withdrawalRequested = withdrawalRequested;
@@ -116,6 +134,10 @@ public class InternshipApplication  {
 	
 	public void setStudent(Student student) {
 		this.student = student;
+	}
+	
+	public void setInternship(Internship internship) {
+		this.internship = internship;
 	}
 	
 	public boolean isAccepted() {

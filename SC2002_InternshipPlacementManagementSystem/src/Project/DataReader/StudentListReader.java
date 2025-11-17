@@ -48,6 +48,22 @@ public class StudentListReader {
             }
             return rows;
         }
+        
+        public List<String[]> readWithoutHeader() throws IOException {
+            List<String[]> rows = new ArrayList<>();
+            try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+                String line;
+                boolean isFirstLine = true;
+                while ((line = br.readLine()) != null) {
+                    if (isFirstLine) { 
+                        isFirstLine = false; 
+                        continue; // skip header
+                    }
+                    rows.add(line.split(","));
+                }
+            }
+            return rows;
+        }
 
 
         private void writeAll(List<String[]> rows) throws IOException {
@@ -128,28 +144,64 @@ public class StudentListReader {
             }
         }
 
-        public List<String> find(String col, String value) {
+//        public List<String> find(String col, String value) {
+//            try {
+//                List<String[]>rows = readAll();
+//                if(rows.isEmpty()) return Collections.emptyList();
+//                /** find col */
+//                int colNum = -1;
+//                String[] header = rows.get(0);
+//                for (int i = 1; i < header.length; i++) {
+//                    if(header[i].equals(col)) {colNum = i;}
+//                }
+//                if(colNum == -1) return Collections.emptyList();
+//                /** find value */
+//                for (int i = 1; i < rows.size(); i++) {
+//                    String[] row = rows.get(i);
+//                    if (row[colNum].equals(value)) {return Arrays.asList(row);}
+//                }
+//                return Collections.emptyList();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//            return Collections.emptyList();
+//        }
+//        
+        
+        public List<String[]> find(String col, String value) {
             try {
-                List<String[]>rows = readAll();
-                if(rows.isEmpty()) return Collections.emptyList();
-                /** find col */
+                List<String[]> rows = readAll();
+                if (rows.isEmpty()) return Collections.emptyList();
+
                 int colNum = -1;
                 String[] header = rows.get(0);
-                for (int i = 1; i < header.length; i++) {
-                    if(header[i].equals(col)) {colNum = i;}
+
+                for (int i = 0; i < header.length; i++) {
+                    if (header[i].equals(col)) {
+                        colNum = i;
+                        break;
+                    }
                 }
-                if(colNum == -1) return Collections.emptyList();
-                /** find value */
+
+                if (colNum == -1) return Collections.emptyList();
+
+                // collect ALL matching rows
+                List<String[]> result = new ArrayList<>();
                 for (int i = 1; i < rows.size(); i++) {
-                    String[] row = rows.get(i);
-                    if (row[colNum].equals(value)) {return Arrays.asList(row);}
+                    if (rows.get(i)[colNum].equals(value)) {
+                        result.add(rows.get(i));
+                    }
                 }
-                return Collections.emptyList();
+
+                return result;
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
             return Collections.emptyList();
         }
+
         
         // find by header, return Student obj
         public Student findStudent(String col, String value) {
@@ -194,6 +246,23 @@ public class StudentListReader {
             }
             return null;
         }
+        
+        public String[] findStudentRaw(String studentId) {
+            try {
+                List<String[]> rows = readAll();
+                for (int i = 1; i < rows.size(); i++) {
+                    if (rows.get(i)[0].equals(studentId)) {
+                        return rows.get(i);
+                    }
+                }
+                return null;
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
 
 
         /** test */

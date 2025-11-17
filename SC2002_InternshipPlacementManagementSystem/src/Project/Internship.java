@@ -191,6 +191,10 @@ public class Internship {
     	return this.companyRep.getId();
     }
 	
+	public CompanyRepresentative getCompanyRepresentative() {
+    	return this.companyRep;
+    }
+	
 	public String getPreferredMajor() {
 		return this.preferredMajor;
 	}

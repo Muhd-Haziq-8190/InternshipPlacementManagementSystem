@@ -52,6 +52,22 @@ public class InternshipListReader {
             }
             return rows;
         }
+        
+        public List<String[]> readWithoutHeader() throws IOException {
+            List<String[]> rows = new ArrayList<>();
+            try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+                String line;
+                boolean isFirstLine = true;
+                while ((line = br.readLine()) != null) {
+                    if (isFirstLine) { 
+                        isFirstLine = false; 
+                        continue; // skip header
+                    }
+                    rows.add(line.split(","));
+                }
+            }
+            return rows;
+        }
 
 
         private void writeAll(List<String[]> rows) throws IOException {
@@ -245,6 +261,22 @@ public class InternshipListReader {
 
         
         
+        public String[] findInternshipRaw(String internshipId) {
+            try {
+                List<String[]> rows = readAll();
+                for (int i = 1; i < rows.size(); i++) {
+                    if (rows.get(i)[0].equals(internshipId)) {
+                        return rows.get(i);
+                    }
+                }
+                return null;
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
         
         /** test */
 

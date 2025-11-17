@@ -49,6 +49,22 @@ public class CompanyListReader {
             }
             return rows;
         }
+        
+        public List<String[]> readWithoutHeader() throws IOException {
+            List<String[]> rows = new ArrayList<>();
+            try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+                String line;
+                boolean isFirstLine = true;
+                while ((line = br.readLine()) != null) {
+                    if (isFirstLine) { 
+                        isFirstLine = false; 
+                        continue; // skip header
+                    }
+                    rows.add(line.split(","));
+                }
+            }
+            return rows;
+        }
 
 
         private void writeAll(List<String[]> rows) throws IOException {
@@ -71,17 +87,6 @@ public class CompanyListReader {
             }
         }
 
-//        public void insert(String id,String company, String name, String department, String position , String email, String status, String internshipID, String InternshipCount) {
-//            try {
-//                List<String[]> rows = readAll();
-//                rows.add(new String[]{id,company, name, department , position, email, status});
-//                writeAll(rows);
-//                //System.out.println("插入成功！");
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-        
         public void insert(CompanyRepresentative companyRep) {
             try {
                 List<String[]> rows = readAll();
@@ -205,6 +210,23 @@ public class CompanyListReader {
             }
             return null;
         }
+        
+        public String[] findCompanyRepRaw(String repId) {
+            try {
+                List<String[]> rows = readAll();
+                for (int i = 1; i < rows.size(); i++) {
+                    if (rows.get(i)[0].equals(repId)) {
+                        return rows.get(i);
+                    }
+                }
+                return null;
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
         
 
 
