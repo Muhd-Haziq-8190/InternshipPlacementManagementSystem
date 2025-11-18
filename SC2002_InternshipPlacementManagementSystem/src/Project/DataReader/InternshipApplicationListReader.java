@@ -169,73 +169,7 @@ public class InternshipApplicationListReader {
             return Collections.emptyList();
         }
         
-        // find by header, return InternshipApplication obj
-        public InternshipApplication findInternshipApplication(String col, String value) {
-            try {
-                List<String[]>rows = readAll();
-                if(rows.isEmpty()) return null;
-                /** find col */
-                int colNum = -1;
-                String[] header = rows.get(0);
-                for (int i = 0; i < header.length; i++) {
-                    if(header[i].equals(col)) {colNum = i;}
-                }
-                if(colNum == -1) {
-                	return null;
-                };
-                
-                InternshipListReader internshipDb = new InternshipListReader("data", "internship_list.csv");
-                StudentListReader studentDb = new StudentListReader("data", "student_list.csv");
-
-                /** find value */
-                for (int i = 1; i < rows.size(); i++) {
-                    String[] row = rows.get(i);
-                    if (row[colNum].equals(value)) {
-                    	InternshipApplication application = new InternshipApplication(
-                    			row[0], 	// InternshipApplicationID
-                    			studentDb.findStudent("StudentID", row[1]), 	// StudentID convert to Student obj
-                    			internshipDb.findInternship("InternshipID", row[2]), 	// InternshipID convert to Internship obj
-                    			row[3], 		// Status
-                    			Boolean.parseBoolean(row[4]), 		// isAccepted
-                    			Boolean.parseBoolean(row[5]) 		// withdrawalRequested
-                    	);
-                    	return application;
-                    	
-                    }
-                }
-                
-                return null;		// Not found
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-        
-        // retrieve multiple internships from a string like "APP1|APP2|APP3"
-        public InternshipApplication[] getApplicationsFromIds(String applicationIdsString) {
-
-            if (applicationIdsString == null || applicationIdsString.isEmpty()) {
-                return new InternshipApplication[0];
-            }
-
-            // Split IDs by "|"
-            String[] ids = applicationIdsString.split("\\|");
-
-            List<InternshipApplication> result = new ArrayList<>();
-
-            for (String id : ids) {
-                id = id.trim();
-                if (id.isEmpty()) continue;
-
-                InternshipApplication application = findInternshipApplication("InternshipApplicationID", id);
-
-                if (application != null) {
-                    result.add(application);
-                }
-            }
-
-            return result.toArray(new InternshipApplication[0]);
-        }
+      
         
         public String[] findApplicationRaw(String applicationId) {
             try {

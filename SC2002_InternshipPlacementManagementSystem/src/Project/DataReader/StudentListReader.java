@@ -143,30 +143,6 @@ public class StudentListReader {
                 e.printStackTrace();
             }
         }
-
-//        public List<String> find(String col, String value) {
-//            try {
-//                List<String[]>rows = readAll();
-//                if(rows.isEmpty()) return Collections.emptyList();
-//                /** find col */
-//                int colNum = -1;
-//                String[] header = rows.get(0);
-//                for (int i = 1; i < header.length; i++) {
-//                    if(header[i].equals(col)) {colNum = i;}
-//                }
-//                if(colNum == -1) return Collections.emptyList();
-//                /** find value */
-//                for (int i = 1; i < rows.size(); i++) {
-//                    String[] row = rows.get(i);
-//                    if (row[colNum].equals(value)) {return Arrays.asList(row);}
-//                }
-//                return Collections.emptyList();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            return Collections.emptyList();
-//        }
-//        
         
         public List<String[]> find(String col, String value) {
             try {
@@ -200,51 +176,6 @@ public class StudentListReader {
             }
 
             return Collections.emptyList();
-        }
-
-        
-        // find by header, return Student obj
-        public Student findStudent(String col, String value) {
-            try {
-                List<String[]>rows = readAll();
-                if(rows.isEmpty()) return null;
-                /** find col */
-                int colNum = -1;
-                String[] header = rows.get(0);
-                for (int i = 0; i < header.length; i++) {
-                    if(header[i].equals(col)) {colNum = i;}
-                }
-                if(colNum == -1) {
-                	return null;
-                };
-                
-                InternshipApplicationListReader internshipAppDb = new InternshipApplicationListReader("data", "internshipApplication_list.csv");
-                
-                /** find value */
-                for (int i = 1; i < rows.size(); i++) {
-                    String[] row = rows.get(i);
-                    if (row[colNum].equals(value)) {
-                    	String appPlacement = (row.length > 7) ? row[7] : "";
-                    	Student student = new Student(
-                    			row[0], 	// StudentID
-                    			row[1], 	// Name
-                    			Integer.parseInt(row[3]), 		// Year
-                    			row[2], 	// Major
-                    			row[4], 	// Email
-                    			internshipAppDb.getApplicationsFromIds(row[5]), 	// InternshipApplicationIDs convert to InternshipApplication[]
-                    			Integer.parseInt(row[6]), 	// ApplicationCount
-                    			internshipAppDb.findInternshipApplication("InternshipApplicationID", appPlacement) 	// acceptedPlacement
-                    	);
-                    	return student;
-                    	
-                    }
-                }
-                
-                return null;		// Not found
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
         }
         
         public String[] findStudentRaw(String studentId) {

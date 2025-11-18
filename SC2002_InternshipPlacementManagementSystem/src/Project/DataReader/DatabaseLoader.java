@@ -5,10 +5,10 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import Project.CompanyRepresentative;
-import Project.Internship;
-import Project.InternshipApplication;
-import Project.Student;
+import Project.classes.CompanyRepresentative;
+import Project.classes.Internship;
+import Project.classes.InternshipApplication;
+import Project.classes.Student;
 
 public class DatabaseLoader {
 	
@@ -20,9 +20,8 @@ public class DatabaseLoader {
 
 //    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 
-
-    // --------- PUBLIC GETTERS ---------
-    // Used for retrieval of user/internship objects by Id
+    
+    // return specific student, companyrep, internship, application
     
     public Student getStudentById(String id) {
         return students.get(id);
@@ -39,6 +38,8 @@ public class DatabaseLoader {
     public InternshipApplication getApplicationById(String id) {
         return applications.get(id);
     }
+    
+
 
     // --------- MAIN LOADING METHOD ---------
     public void loadAllData(
@@ -47,6 +48,13 @@ public class DatabaseLoader {
         List<String[]> internshipData,
         List<String[]> applicationData
     ) {
+    	
+        // clear existing data so no duplicates are available
+        students.clear();
+        companyReps.clear();
+        internships.clear();
+        applications.clear();
+        
         // reconstruct Students obj
         for (String[] row : studentData) {
             String id = row[0];
@@ -173,6 +181,7 @@ public class DatabaseLoader {
         Internship inter = loader.getInternshipById("INT1");
         System.out.println(inter.getInternshipApplications()[0].getStudent().getEmail());
         System.out.println(inter.getCompanyRepresentative().getInternshipIds());
+        
     }
 
     

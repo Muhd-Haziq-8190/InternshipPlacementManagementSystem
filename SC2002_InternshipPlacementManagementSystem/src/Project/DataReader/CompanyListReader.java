@@ -168,48 +168,6 @@ public class CompanyListReader {
             return Collections.emptyList();
         }
         
-        // find by header, return CompanyRepresentative obj
-        public CompanyRepresentative findCompanyRepresentative(String col, String value) {
-            try {
-                List<String[]>rows = readAll();
-                if(rows.isEmpty()) return null;
-                /** find col */
-                int colNum = -1;
-                String[] header = rows.get(0);
-                for (int i = 0; i < header.length; i++) {
-                    if(header[i].equals(col)) {colNum = i;}
-                }
-                if(colNum == -1) {
-                	return null;
-                };
-                
-                InternshipListReader db = new InternshipListReader("data", "internship_list.csv");
-                
-                /** find value */
-                for (int i = 1; i < rows.size(); i++) {
-                    String[] row = rows.get(i);
-                    if (row[colNum].equals(value)) {
-                    	CompanyRepresentative companyRep = new CompanyRepresentative(
-                    			row[0], 	// CompanyRepID
-                    			row[1], 	// Company
-                    			row[2], 	// Name
-                    			row[3], 	// Department
-                    			row[4], 	// Position
-                    			row[5], 	// Status
-                    			db.getInternshipsFromIds(row[6]), 	// InternshipIDs convert to Internship[]
-                    			Integer.parseInt(row[7]) 	// InternshipCount
-                    	);
-                    	return companyRep;
-                    	
-                    }
-                }
-                
-                return null;		// Not found
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
         
         public String[] findCompanyRepRaw(String repId) {
             try {
@@ -232,19 +190,6 @@ public class CompanyListReader {
 
         /** test */
 
-//        public static void main(String[] args) {
-//            CompanyListReader db = new CompanyListReader("data", "company_list.csv");
-//
-//            System.out.println("当前数据：");
-//            db.printAll();
-//
-//            System.out.println("\n 插入：");
-////            db.insert("3","C", "123", "5", "1","1");
-//            //db.delete("3");
-//            System.out.println("\n 插入后：");
-//            db.printAll();
-//        }
-        
         public static void main(String[] args) {
 
             CompanyListReader db = new CompanyListReader("data", "company_list.csv");
