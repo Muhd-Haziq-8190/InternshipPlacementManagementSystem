@@ -7,11 +7,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import Project.CareerStaff;
-import Project.CompanyRepresentative;
-import Project.Internship;
-import Project.InternshipApplication;
-import Project.Student;
+import Project.classes.CareerStaff;
+import Project.classes.CompanyRepresentative;
+import Project.classes.Internship;
+import Project.classes.InternshipApplication;
+import Project.classes.Student;
 
 public class InternshipApplicationListReader {
         private final String filePath;

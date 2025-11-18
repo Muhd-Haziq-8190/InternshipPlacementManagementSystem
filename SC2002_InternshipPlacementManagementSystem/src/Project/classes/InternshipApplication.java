@@ -1,4 +1,4 @@
-package Project;
+package Project.classes;
 
 public class InternshipApplication  {
 	private static int idCounter = 1;	 // counter for unique Internship Application IDs

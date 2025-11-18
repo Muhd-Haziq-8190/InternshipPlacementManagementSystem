@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import Project.CareerStaff;
+import Project.classes.CareerStaff;
 
 public class StaffListReader {
         private final String filePath;

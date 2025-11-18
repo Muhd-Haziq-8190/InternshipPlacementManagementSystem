@@ -1,4 +1,4 @@
-package Project;
+package Project.classes;
 
 public class Student extends User {
 	

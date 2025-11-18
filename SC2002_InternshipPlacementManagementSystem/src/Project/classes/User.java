@@ -1,4 +1,4 @@
-package Project;
+package Project.classes;
 
 public abstract class User {
 	private String userId;

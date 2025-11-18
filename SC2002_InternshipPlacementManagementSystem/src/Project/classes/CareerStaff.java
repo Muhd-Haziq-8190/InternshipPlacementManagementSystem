@@ -1,4 +1,4 @@
-package Project;
+package Project.classes;
 
 public class CareerStaff extends User{
 	private String role;

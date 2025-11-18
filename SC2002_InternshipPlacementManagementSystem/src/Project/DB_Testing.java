@@ -1,10 +1,10 @@
 package Project;
 
-import Project.CareerStaff;
-import Project.CompanyRepresentative;
-import Project.Internship;
-import Project.Student;
 import Project.DataReader.*;
+import Project.classes.CareerStaff;
+import Project.classes.CompanyRepresentative;
+import Project.classes.Internship;
+import Project.classes.Student;
 
 import java.time.LocalDate;
 
