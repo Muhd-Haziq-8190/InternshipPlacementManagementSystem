@@ -12,27 +12,6 @@ public abstract class User {
 	}
 	
 	
-	// Checks if current pass is equal to input pass for authentication
-	public boolean checkPassword(String password) {
-		return this.password.equals(password);
-		
-	}
-	
-	
-	public boolean changePassword(String oldPass, String newPass) {
-		// Checks for following before changing password:
-		// 1) input password does not equal current password
-		// 2) New password is not null
-		// 3) New password is not an empty string
-		
-		if(this.checkPassword(oldPass) && newPass != null && !newPass.isEmpty()) {
-			this.setPassword(newPass);
-			return true;
-		}
-		return false;
-	}
-	
-	
 	// --------- GETTER & SETTER --------- //
 	
 	public String getId() {
