@@ -43,6 +43,22 @@ public class StaffListReader {
             }
             return rows;
         }
+        
+        public List<String[]> readWithoutHeader() throws IOException {
+            List<String[]> rows = new ArrayList<>();
+            try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+                String line;
+                boolean isFirstLine = true;
+                while ((line = br.readLine()) != null) {
+                    if (isFirstLine) { 
+                        isFirstLine = false; 
+                        continue; // skip header
+                    }
+                    rows.add(line.split(","));
+                }
+            }
+            return rows;
+        }
 
         /** 写回文件 */
         private void writeAll(List<String[]> rows) throws IOException {
@@ -83,6 +99,8 @@ public class StaffListReader {
                 e.printStackTrace();
             }
         }
+        
+        
 
         /** 更新记录 */
         public void update(CareerStaff careerStaff) {

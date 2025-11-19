@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import Project.classes.CareerStaff;
 import Project.classes.CompanyRepresentative;
 import Project.classes.Internship;
 import Project.classes.InternshipApplication;
@@ -17,6 +18,7 @@ public class DatabaseLoader {
     private Map<String, CompanyRepresentative> companyReps = new HashMap<>();
     private Map<String, Internship> internships = new HashMap<>();
     private Map<String, InternshipApplication> applications = new HashMap<>();
+    private Map<String, CareerStaff> careerStaffs = new HashMap<>();
 
 //    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 
@@ -39,22 +41,254 @@ public class DatabaseLoader {
         return applications.get(id);
     }
     
+    public CareerStaff getCareerStaffById(String id) {
+        return careerStaffs.get(id);
+    }
+
+    // Methods to retrieve full arraylist of all 
+    // - students
+    // - companyreps
+    // - internships
+    // - applications
+    // - careerStaff
+
+    public List<Student> getAllStudents() {
+        return new ArrayList<>(students.values());
+    }
+
+    public List<CompanyRepresentative> getAllCompanyReps() {
+        return new ArrayList<>(companyReps.values());
+    }
+
+    public List<Internship> getAllInternships() {
+        return new ArrayList<>(internships.values());
+    }
+
+    public List<InternshipApplication> getAllApplications() {
+        return new ArrayList<>(applications.values());
+    }
+    
+    public List<CareerStaff> getAllCareerStaff() {
+        return new ArrayList<>(careerStaffs.values());
+    }
+
+
+    // ========= Filtering Functions ========= 
+    // By fields
+    
+    // ---- Students ----
+    public List<Student> getStudentsByMajor(String major) {
+        List<Student> filteredStudents = new ArrayList<>();
+        for (Student s : students.values()) {
+            if (s.getMajor().equalsIgnoreCase(major)) {
+            	filteredStudents.add(s);
+            }
+        }
+        
+        if(filteredStudents.size() <= 0) {
+        	System.out.println("No students found by this major.");
+        }
+        
+        return filteredStudents;
+    }
+
+    public List<Student> getStudentsByYear(int year) {
+        List<Student> filteredStudents = new ArrayList<>();
+        for (Student s : students.values()) {
+            if (s.getYearOfStudy() == year) {
+            	filteredStudents.add(s);
+            }
+        }
+        
+        if(filteredStudents.size() <= 0) {
+        	System.out.println("No students found by this year of study.");
+        }
+        
+        return filteredStudents;
+    }
+
+    // ---- Company Representatives ----
+    public List<CompanyRepresentative> getCompanyRepsByCompany(String company) {
+        List<CompanyRepresentative> filteredCompanyRep = new ArrayList<>();
+        for (CompanyRepresentative cr : companyReps.values()) {
+            if (cr.getCompanyName().equalsIgnoreCase(company)) {
+            	filteredCompanyRep.add(cr);
+            }
+        }
+        
+        if(filteredCompanyRep.size() <= 0) {
+        	System.out.println("No company reps found by this company.");
+        }
+        
+        return filteredCompanyRep;
+    }
+
+    public List<CompanyRepresentative> getCompanyRepsByStatus(String status) {
+        List<CompanyRepresentative> filteredCompanyRep = new ArrayList<>();
+        for (CompanyRepresentative cr : companyReps.values()) {
+            if (cr.getAccountStatus().equalsIgnoreCase(status)) {
+            	filteredCompanyRep.add(cr);
+            }
+        }
+        
+        if(filteredCompanyRep.size() <= 0) {
+        	System.out.println("No company reps found by this status.");
+        }
+        
+        return filteredCompanyRep;
+    }
+
+    // ---- Internships ----
+    public List<Internship> getInternshipsByMajor(String major) {
+        List<Internship> filteredInternships = new ArrayList<>();
+        for (Internship i : internships.values()) {
+            if (i.getPreferredMajor().equalsIgnoreCase(major)) {
+            	filteredInternships.add(i);
+            }
+        }
+        
+        if(filteredInternships.size() <= 0) {
+        	System.out.println("No internships by this preferred major.");
+        }
+        return filteredInternships;
+    }
+
+    public List<Internship> getInternshipsByStatus(String status) {
+        List<Internship> filteredInternships = new ArrayList<>();
+        for (Internship i : internships.values()) {
+            if (i.getStatus().equalsIgnoreCase(status)) {
+            	filteredInternships.add(i);
+            }
+        }
+        
+        if(filteredInternships.size() <= 0) {
+        	System.out.println("None found by this status.");
+        }
+        
+        return filteredInternships;
+    }
+
+    public List<Internship> getInternshipsByCompany(String company) {
+        List<Internship> filteredInternships = new ArrayList<>();
+        for (Internship i : internships.values()) {
+            if (i.getCompanyName().equalsIgnoreCase(company)) {
+            	filteredInternships.add(i);
+            }
+        }
+        
+        if(filteredInternships.size() <= 0) {
+        	System.out.println("No internships found by this company.");
+        }
+        
+        return filteredInternships;
+    }
+
+    // ---- Applications ----
+    public List<InternshipApplication> getApplicationsByStatus(String status) {
+        List<InternshipApplication> filteredApplications = new ArrayList<>();
+        for (InternshipApplication app : applications.values()) {
+            if (app.getStatus().equalsIgnoreCase(status)) {
+            	filteredApplications.add(app);
+            }
+        }
+        
+        if(filteredApplications.size() <= 0) {
+        	System.out.println("No applications found by this status.");
+        }
+        
+        return filteredApplications;
+    }
+
+    public List<InternshipApplication> getApplicationsByStudent(String studentId) {
+        List<InternshipApplication> filteredApplications = new ArrayList<>();
+        for (InternshipApplication app : applications.values()) {
+            if (app.getStudent().getId().equals(studentId)) {
+            	filteredApplications.add(app);
+            }
+        }
+        
+        if(filteredApplications.size() <= 0) {
+        	System.out.println("No applications found by this student.");
+        }
+        
+        
+        return filteredApplications;
+    }
+
+    public List<InternshipApplication> getApplicationsByInternship(String internshipId) {
+        List<InternshipApplication> filteredApplications = new ArrayList<>();
+        for (InternshipApplication app : applications.values()) {
+            if (app.getInternship().getId().equals(internshipId)) {
+            	filteredApplications.add(app);
+            }
+        }
+        
+        if(filteredApplications.size() <= 0) {
+        	System.out.println("No applications found by this internship.");
+        }
+        
+        return filteredApplications;
+    }
+    
+    // ---- CareerStaff ----
+    public List<CareerStaff> getCareerStaffByRole(String role) {
+        List<CareerStaff> filteredCareerStaff = new ArrayList<>();
+        for (CareerStaff careerStaff : careerStaffs.values()) {
+            if (careerStaff.getRole().equalsIgnoreCase(role)) {
+            	filteredCareerStaff.add(careerStaff);
+            }
+        }
+        
+        if(filteredCareerStaff.size() <= 0) {
+        	System.out.println("No career staffs found by this role.");
+        }
+        
+        return filteredCareerStaff;
+    }
+    
+    public List<CareerStaff> getCareerStaffByDepartment(String department) {
+        List<CareerStaff> filteredCareerStaff = new ArrayList<>();
+        for (CareerStaff careerStaff : careerStaffs.values()) {
+            if (careerStaff.getDepartment().equalsIgnoreCase(department)) {
+            	filteredCareerStaff.add(careerStaff);
+            }
+        }
+        
+        if(filteredCareerStaff.size() <= 0) {
+        	System.out.println("No career staffs found by this department.");
+        }
+        
+        return filteredCareerStaff;
+    }
 
 
     // --------- MAIN LOADING METHOD ---------
-    public void loadAllData(
-        List<String[]> studentData,
-        List<String[]> companyRepData,
-        List<String[]> internshipData,
-        List<String[]> applicationData
-    ) {
+    public void loadAllData() throws IOException {
+    	 
+    	
+    	List<String[]> studentData = new StudentListReader("data", "student_list.csv").readWithoutHeader();
+        List<String[]> companyRepData = new CompanyListReader("data", "company_list.csv").readWithoutHeader();
+        List<String[]> internshipData = new InternshipListReader("data", "internship_list.csv").readWithoutHeader();
+        List<String[]> applicationData = new InternshipApplicationListReader("data", "internshipApplication_list.csv").readWithoutHeader();
+        List<String[]> careerStaffData = new StaffListReader("data", "staff_list.csv").readWithoutHeader();
+    	
     	
         // clear existing data so no duplicates are available
         students.clear();
         companyReps.clear();
         internships.clear();
         applications.clear();
+        careerStaffs.clear();
         
+        // reconstruct CareerStaff obj
+        for (String[] row : careerStaffData) {
+            String id = row[0];
+            String name = row[1];
+            String role = row[2];
+            String department = row[3];
+            careerStaffs.put(id, new CareerStaff(id, name, role, department));
+        }
+
         // reconstruct Students obj
         for (String[] row : studentData) {
             String id = row[0];
@@ -152,36 +386,57 @@ public class DatabaseLoader {
     
     public static void main(String[] args) throws IOException {
         DatabaseLoader loader = new DatabaseLoader();
+        loader.loadAllData();
         
-    	CompanyListReader companyDb = new CompanyListReader("data", "company_list.csv");
-        InternshipListReader internshipDb = new InternshipListReader("data", "internship_list.csv");
-        InternshipApplicationListReader appDb = new InternshipApplicationListReader("data", "internshipApplication_list.csv");
-        StaffListReader staffDb = new StaffListReader("data", "staff_list.csv");
-        StudentListReader studentDb = new StudentListReader("data", "student_list.csv");
-
-
-        // retrieve all data in db as string
-        List<String[]> studentsCsv = studentDb.readWithoutHeader();
-        List<String[]> repsCsv = companyDb.readWithoutHeader();
-        List<String[]> internshipsCsv = internshipDb.readWithoutHeader();
-        List<String[]> applicationsCsv = appDb.readWithoutHeader();
+        
         
         // load all data, create respective objects
-        loader.loadAllData(studentsCsv, repsCsv, internshipsCsv, applicationsCsv);
-
+//        loader.loadAllData(studentsCsv, repsCsv, internshipsCsv, applicationsCsv, staffCsv);
+        
         // Test output
 //        Student s = loader.getStudentById("STU001");
-        Student s = loader.getStudentById("U2345678B");
-        System.out.println(s.getApplicationIds());
+//        Student s = loader.getStudentById("U2345678B");
+//        System.out.println(s.getApplicationIds());
+//
+//        CompanyRepresentative rep = loader.getCompanyRepById("bob@amazon.com");
+//        System.out.println(rep.getInternshipIds());
+//        System.out.println(rep.getInternships()[1].getTitle());
+//        
+//        Internship inter = loader.getInternshipById("INT1");
+//        System.out.println(inter.getInternshipApplications()[0].getStudent().getEmail());
+//        System.out.println(inter.getCompanyRepresentative().getInternshipIds());
+//        
+//        
+//        List<Internship> internships = loader.getInternshipsByCompany("Amazon");
+//        System.out.println("\n\n"+ internships.size());
+//        
+//        for(Internship i : internships) {
+//        	System.out.println(i.getId());
+//        	System.out.println(i.getCompanyName());
+//        	System.out.println(i.getCompanyRepresentative().getPassword());
+//        	
+//        }
+//        
+//        List<CareerStaff> careerStaffs = loader.getAllCareerStaff();
+//        for(CareerStaff cs : careerStaffs) {
+//        	System.out.println(cs);
+//        	System.out.println(cs.getId());
+//        	System.out.println(cs.getName());
+//        	System.out.println(cs.getRole());
+//        	System.out.println(cs.getDepartment());
+//        }
+//        
+//        List<CareerStaff> careerStaffs1 = loader.getCareerStaffByRole("Advisor");
+//        for(CareerStaff cs : careerStaffs1) {
+//        	System.out.println(cs);
+//        	System.out.println(cs.getId());
+//        	System.out.println(cs.getName());
+//        	System.out.println(cs.getRole());
+//        	System.out.println(cs.getDepartment());
+//        }
+        
+        
 
-        CompanyRepresentative rep = loader.getCompanyRepById("bob@amazon.com");
-        System.out.println(rep.getInternshipIds());
-        System.out.println(rep.getInternships()[1].getTitle());
-        
-        Internship inter = loader.getInternshipById("INT1");
-        System.out.println(inter.getInternshipApplications()[0].getStudent().getEmail());
-        System.out.println(inter.getCompanyRepresentative().getInternshipIds());
-        
     }
 
     

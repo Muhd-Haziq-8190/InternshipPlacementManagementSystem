@@ -37,7 +37,6 @@ public class Internship {
 		this.closeDate = closeDate;
 		this.companyName = companyName;
 		this.companyRep = companyRep;
-//		this.slotsAvailable = Math.max(0, Math.min(10, slots)); // ensure 0-10
 		this.slotsAvailable = 10;	// defaults to 10 slots available
 		this.visibility = true; 	// visible by default
 		this.status = "Pending";	// pending by default when created
