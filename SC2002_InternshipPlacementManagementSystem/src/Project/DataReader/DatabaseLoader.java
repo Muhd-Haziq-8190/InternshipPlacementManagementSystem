@@ -19,10 +19,99 @@ public class DatabaseLoader {
     private Map<String, Internship> internships = new HashMap<>();
     private Map<String, InternshipApplication> applications = new HashMap<>();
     private Map<String, CareerStaff> careerStaffs = new HashMap<>();
+    
+    StudentListReader studentDb = new StudentListReader("data", "student_list.csv");
+    CompanyListReader companyRepDb = new CompanyListReader("data", "company_list.csv");
+    InternshipListReader internshipDb = new InternshipListReader("data", "internship_list.csv");
+    InternshipApplicationListReader applicationDb= new InternshipApplicationListReader("data", "internshipApplication_list.csv");
+    StaffListReader careerStaffDb = new StaffListReader("data", "staff_list.csv");
+	
 
 //    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-
     
+    // ===== CRUD Operations =====
+    
+    // Student
+    public void insertStudent(Student student) throws IOException {
+    	studentDb.insert(student);
+    	loadAllData();
+    }
+    
+    public void updateStudent(Student student) throws IOException {
+    	studentDb.update(student);
+    	loadAllData();
+    }
+    
+    public void deleteStudent(String id) throws IOException {
+    	studentDb.delete(id);
+    	loadAllData();
+    }
+    
+    // CompanyRepresentative
+    public void insertCompanyRep(CompanyRepresentative companyRep) throws IOException {
+    	companyRepDb.insert(companyRep);
+    	loadAllData();
+    }
+    
+    public void updateCompanyRep(CompanyRepresentative companyRep) throws IOException {
+    	companyRepDb.update(companyRep);
+    	loadAllData();
+    }
+    
+    public void deleteCompanyRep(String id) throws IOException {
+    	companyRepDb.delete(id);
+    	loadAllData();
+    }
+    
+    // CareerStaff
+    public void insertCareerStaff(CareerStaff careerStaff) throws IOException {
+    	careerStaffDb.insert(careerStaff);
+    	loadAllData();
+    }
+    
+    public void updateCareerStaff(CareerStaff careerStaff) throws IOException {
+    	careerStaffDb.update(careerStaff);
+    	loadAllData();
+    }
+    
+    public void deleteCareerStaff(String id) throws IOException {
+    	careerStaffDb.delete(id);
+    	loadAllData();
+    }
+    
+    // Internship
+    public void insertInternship(Internship internship) throws IOException {
+    	internshipDb.insert(internship);
+    	loadAllData();
+    }
+    
+    public void updateInternship(Internship internship) throws IOException {
+    	internshipDb.update(internship);
+    	loadAllData();
+    }
+    
+    public void deleteInternship(String id) throws IOException {
+    	internshipDb.delete(id);
+    	loadAllData();
+    }
+    
+    // InternshipApplication
+    public void insertInternshipApplication(InternshipApplication internshipApplication) throws IOException {
+    	applicationDb.insert(internshipApplication);
+    	loadAllData();
+    }
+    
+    public void updateInternshipApplication(InternshipApplication internshipApplication) throws IOException {
+    	applicationDb.update(internshipApplication);
+    	loadAllData();
+    }
+    
+    public void deleteInternshipApplication(String id) throws IOException {
+    	applicationDb.delete(id);
+    	loadAllData();
+    }
+    
+    // ===== getUserById =====
     // return specific student, companyrep, internship, application
     
     public Student getStudentById(String id) {
@@ -45,7 +134,7 @@ public class DatabaseLoader {
         return careerStaffs.get(id);
     }
 
-    // Methods to retrieve full arraylist of all 
+    // ==== Methods to retrieve full arraylist of all =====
     // - students
     // - companyreps
     // - internships
@@ -266,12 +355,17 @@ public class DatabaseLoader {
     public void loadAllData() throws IOException {
     	 
     	
-    	List<String[]> studentData = new StudentListReader("data", "student_list.csv").readWithoutHeader();
-        List<String[]> companyRepData = new CompanyListReader("data", "company_list.csv").readWithoutHeader();
-        List<String[]> internshipData = new InternshipListReader("data", "internship_list.csv").readWithoutHeader();
-        List<String[]> applicationData = new InternshipApplicationListReader("data", "internshipApplication_list.csv").readWithoutHeader();
-        List<String[]> careerStaffData = new StaffListReader("data", "staff_list.csv").readWithoutHeader();
+//    	List<String[]> studentData = new StudentListReader("data", "student_list.csv").readWithoutHeader();
+//        List<String[]> companyRepData = new CompanyListReader("data", "company_list.csv").readWithoutHeader();
+//        List<String[]> internshipData = new InternshipListReader("data", "internship_list.csv").readWithoutHeader();
+//        List<String[]> applicationData = new InternshipApplicationListReader("data", "internshipApplication_list.csv").readWithoutHeader();
+//        List<String[]> careerStaffData = new StaffListReader("data", "staff_list.csv").readWithoutHeader();
     	
+        List<String[]> studentData = studentDb.readWithoutHeader();
+        List<String[]> companyRepData = companyRepDb.readWithoutHeader();
+        List<String[]> internshipData = internshipDb.readWithoutHeader();
+        List<String[]> applicationData = applicationDb.readWithoutHeader();
+        List<String[]> careerStaffData = careerStaffDb.readWithoutHeader();
     	
         // clear existing data so no duplicates are available
         students.clear();
@@ -386,6 +480,19 @@ public class DatabaseLoader {
     
     public static void main(String[] args) throws IOException {
         DatabaseLoader loader = new DatabaseLoader();
+        loader.loadAllData();
+        
+//        loader.insertStudent(new Student("U2423F", "John", 1, "Computer Engineering", "test123@hotmail.com"));
+        
+        Student a = loader.getStudentById("U2423123F");
+        System.out.println(a.getId());
+        System.out.println(a.getName());
+        System.out.println(a.getEmail());
+        
+        Internship internship = loader.getInternshipById("INT1");
+        loader.insertInternshipApplication(a.applyTo(internship));
+        loader.updateInternship(internship);
+        loader.updateStudent(a);
         loader.loadAllData();
         
         

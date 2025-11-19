@@ -50,28 +50,26 @@ public class Student extends User {
     }
 
 	// applies for internship if condition met
-	public boolean applyTo(Internship internship) {
+	public InternshipApplication applyTo(Internship internship) {
 		
 		// can only apply for max 3 internships
 		// does not apply if at capacity
 		if(this.applicationCount >= 3) {
-			System.out.println("Student Class, applyTo() method: applicationCount >= 3");
-			return false;
-			
+			System.out.println("Student Class, applyTo() method: applicationCount >= 3");			
+			return null;
 		}
 		
 		// internship is not open or student is not eligible
 		if(!internship.isOpenFor(this)) {
-//			System.out.println("Student Class, isOpenFor() method: Student not eligible");
-			return false;
+			System.out.println("Student Class, isOpenFor() method: Student not eligible");
+			return null;
 		}
-		
 		
 		InternshipApplication appli = new InternshipApplication(this, internship);
 		internAppli[applicationCount++] = appli; // updates student's application list and count
 		internship.addApplication(appli); // updates respective internship with application information
-		return true;
-		
+		return appli;
+		 
 	}
 	
 	

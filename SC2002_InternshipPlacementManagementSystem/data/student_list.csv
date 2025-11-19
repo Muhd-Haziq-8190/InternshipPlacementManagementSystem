@@ -1,3 +1,5 @@
 StudentID,Name,Major,Year,Email,InternshipApplicationIDs,ApplicationCount,AcceptedInternshipApplicationID
 U1234567A,John Tan,Computer Science,3,john@ntu.edu.sg,APP1,1
-U2345678B,Mary Lim,Information Systems,3,mary@ntu.edu.sg,APP2,1,
+U2345678B,Mary Lim,Information Systems,3,mary@ntu.edu.sg,APP2,1
+U2423123F,Johnny,Computer Science,3,test123@hotmail.com,APP3,1,
+U2423F,John,Computer Engineering,3,test123@hotmail.com,,0

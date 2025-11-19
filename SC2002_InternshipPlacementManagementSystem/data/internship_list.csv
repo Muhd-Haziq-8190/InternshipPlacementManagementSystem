@@ -1,4 +1,4 @@
 InternshipID,Title,Description,Level,PreferredMajor,OpenDate,CloseDate,Status,CompanyName,CompanyRepresentativeID,AvailableSlots,isVisible,InternshipApplicationID
-INT1,Software Engineering Intern,Backend API Development,Intermediate,Computer Science,2025-11-12,2025-12-17,Approved,Google,alice@google.com,10,true,APP1
+INT1,Software Engineering Intern,Backend API Development,Intermediate,Computer Science,2025-11-12,2025-12-17,Approved,Google,alice@google.com,10,true,APP1|APP3
 INT2,IT Support Intern,Maintain IT systems,Basic,Information Systems,2025-11-14,2025-12-12,Approved,Amazon,bob@amazon.com,10,true,APP2
 INT3,IT FISHING ESCAPADE,Maintain AI Fishin Software,Intermediate,Information Systems,2025-11-14,2025-12-12,Approved,Amazon,bob@amazon.com,10,true

@@ -1,3 +1,4 @@
 InternshipApplicationID,StudentID,InternshipID,Status,isAccepted,withdrawalRequested
 APP1,U1234567A,INT1,Pending,false,false
 APP2,U2345678B,INT2,Pending,false,false
+APP3,U2423123F,INT1,Pending,false,false
