@@ -17,9 +17,9 @@ public class StaffListReader {
                 dir.mkdirs(); // 创建文件夹
                 System.out.println("已创建数据目录：" + dir.getAbsolutePath());
             }
-
+            
             this.filePath = folder + File.separator + fileName;
-
+            
             // 如果文件不存在，则创建并写入表头
             File file = new File(filePath);
             if (!file.exists()) {
@@ -68,7 +68,7 @@ public class StaffListReader {
                 }
             }
         }
-
+        
         /** 查询所有 */
         public void selectAll() {
             try {
@@ -339,7 +339,7 @@ public class StaffListReader {
 //            for(int i = 0; i < staffList.size(); i++) {
 //            	 System.out.println(staffList.get(i).getId() + staffList.get(i).getName() + staffList.get(i).getRole() + staffList.get(i).getDepartment());
 //            }
-
+            
             // retrieve all based on header
             List<CareerStaff> deptStaff = db.getCareerStaffBy("Department", "Student Career Office");
 

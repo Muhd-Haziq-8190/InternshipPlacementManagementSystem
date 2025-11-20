@@ -33,14 +33,6 @@ public class Student extends User {
 		this.acceptedPlacement = acceptedPlacement;									// default is null, student must accept an internship first
 	}
 	
-	
-	
-	// checks if student has already accepted an internship
-	public boolean hasAcceptedPlacement() {
-        return this.acceptedPlacement != null;
-    }
-	
-	
 	// checks if specified level can be displayed for current student
 	public boolean canApplyForLevel(String level) {
         if (yearOfStudy <= 2) {
@@ -145,6 +137,42 @@ public class Student extends User {
         return applicationIds;
 	}
 	
+	// checks if student has already accepted an internship
+	public boolean hasAcceptedPlacement() {
+        return this.acceptedPlacement != null;
+    }
+		
+	
+	public InternshipApplication acceptInternship(InternshipApplication application) {
+		// If already accepted something before, no new accept allowed
+	    if (this.acceptedPlacement != null) {
+	        System.out.println("Student has already accepted a placement.");
+	        return null;
+	    }
+	    
+	    application.setAccepted(true);
+	    this.acceptedPlacement = application;
+	    
+	    // internship consumes one slot
+	    Internship internship = application.getInternship();
+	    internship.confirmSlot();
+	        
+	    // withdraw all other applications
+	    for (int i = 0; i < applicationCount; i++) {
+	        InternshipApplication otherApp= internAppli[i];
+	        if (otherApp != null && otherApp != application) {
+	        	otherApp.setStatus("Withdrawn");
+	        	otherApp.getInternship().removeApplication(otherApp);
+	        }
+	    }
+	    
+	    // clear student’s list and keep only the accepted one
+	    internAppli = new InternshipApplication[3];
+	    internAppli[0] = application;
+	    applicationCount = 1;
+	    
+	    return application;
+	}
 	
 	// --------- GETTER & SETTER --------- //
 	
@@ -173,12 +201,8 @@ public class Student extends User {
 		return this.acceptedPlacement;
 	}
 	
-	public void setAcceptedPlacement(InternshipApplication application) {
-		this.acceptedPlacement = application;
+	public void setAcceptedPlacement(InternshipApplication acceptedPlacement) {
+		this.acceptedPlacement = acceptedPlacement;
+		
 	}
-	
-	
-	
-	
-	
 }

@@ -125,7 +125,7 @@ public class UserListReader {
 
 
         /** test */
-
+        
         public static void main(String[] args) {
             UserListReader db = new UserListReader("data", "userlist.csv");
 
@@ -138,8 +138,6 @@ public class UserListReader {
             System.out.println("\n 插入后：");
             db.printAll();
         }
-
-
 }
 
 

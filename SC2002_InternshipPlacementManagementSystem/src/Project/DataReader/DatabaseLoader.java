@@ -13,6 +13,7 @@ import Project.classes.Student;
 
 public class DatabaseLoader {
 	
+	
     // maps to hold objects by their IDs for quick lookup
     private Map<String, Student> students = new HashMap<>();
     private Map<String, CompanyRepresentative> companyReps = new HashMap<>();
@@ -20,11 +21,11 @@ public class DatabaseLoader {
     private Map<String, InternshipApplication> applications = new HashMap<>();
     private Map<String, CareerStaff> careerStaffs = new HashMap<>();
     
-    StudentListReader studentDb = new StudentListReader("data", "student_list.csv");
-    CompanyListReader companyRepDb = new CompanyListReader("data", "company_list.csv");
-    InternshipListReader internshipDb = new InternshipListReader("data", "internship_list.csv");
-    InternshipApplicationListReader applicationDb= new InternshipApplicationListReader("data", "internshipApplication_list.csv");
-    StaffListReader careerStaffDb = new StaffListReader("data", "staff_list.csv");
+    private StudentListReader studentDb = new StudentListReader("data", "student_list.csv");
+    private CompanyListReader companyRepDb = new CompanyListReader("data", "company_list.csv");
+    private InternshipListReader internshipDb = new InternshipListReader("data", "internship_list.csv");
+    private InternshipApplicationListReader applicationDb= new InternshipApplicationListReader("data", "internshipApplication_list.csv");
+    private StaffListReader careerStaffDb = new StaffListReader("data", "staff_list.csv");
 	
 
 //    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
@@ -482,19 +483,37 @@ public class DatabaseLoader {
         DatabaseLoader loader = new DatabaseLoader();
         loader.loadAllData();
         
+        // creating new student
 //        loader.insertStudent(new Student("U2423F", "John", 1, "Computer Engineering", "test123@hotmail.com"));
         
+        // retrieving student by id
         Student a = loader.getStudentById("U2423123F");
-        System.out.println(a.getId());
-        System.out.println(a.getName());
-        System.out.println(a.getEmail());
+//        System.out.println(a.getId());
+//        System.out.println(a.getName());
+//        System.out.println(a.getEmail());
         
+        // retrieve internship
+        // apply for internship
+        // -> new entry
+        // -> Internship .csv entry must be updated to add new InternshipApplication linked to that Internship
+        // -> Student .csv entry must be updated to add new InternshipApplication to that Student
+        // -> Reload data
         Internship internship = loader.getInternshipById("INT1");
-        loader.insertInternshipApplication(a.applyTo(internship));
-        loader.updateInternship(internship);
-        loader.updateStudent(a);
+//        loader.insertInternshipApplication(a.applyTo(internship));
+//        loader.updateInternship(internship);
+//        loader.updateStudent(a);
         loader.loadAllData();
         
+        CompanyRepresentative companyRep = loader.getCompanyRepById("alice@google.com");
+        InternshipApplication application = loader.getApplicationById("APP3");
+        System.out.println(companyRep.getCompanyName());
+        
+        
+        loader.updateInternshipApplication(companyRep.approveApplication(application.getId()));
+        
+        loader.updateInternshipApplication(a.acceptInternship(application));
+        loader.updateStudent(a);
+        loader.updateInternship(application.getInternship());
         
         
         // load all data, create respective objects

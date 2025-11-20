@@ -144,37 +144,26 @@ public class StudentListReader {
             }
         }
         
-        public List<String[]> find(String col, String value) {
+        public  List<String> find(String col, String value) {
             try {
-                List<String[]> rows = readAll();
-                if (rows.isEmpty()) return Collections.emptyList();
-
+                List<String[]>rows = readAll();
+                if(rows.isEmpty()) return Collections.emptyList();
+                /** find col */
                 int colNum = -1;
                 String[] header = rows.get(0);
-
-                for (int i = 0; i < header.length; i++) {
-                    if (header[i].equals(col)) {
-                        colNum = i;
-                        break;
-                    }
+                for (int i = 1; i < header.length; i++) {
+                    if(header[i].equals(col)) {colNum = i;}
                 }
-
-                if (colNum == -1) return Collections.emptyList();
-
-                // collect ALL matching rows
-                List<String[]> result = new ArrayList<>();
+                if(colNum == -1) return Collections.emptyList();
+                /** find value */
                 for (int i = 1; i < rows.size(); i++) {
-                    if (rows.get(i)[colNum].equals(value)) {
-                        result.add(rows.get(i));
-                    }
+                    String[] row = rows.get(i);
+                    if (row[colNum].equals(value)) {return Arrays.asList(row);}
                 }
-
-                return result;
-
+                return Collections.emptyList();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
             return Collections.emptyList();
         }
         

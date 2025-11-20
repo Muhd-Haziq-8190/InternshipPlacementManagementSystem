@@ -69,7 +69,8 @@ public class InternshipApplication  {
 	    }
 	}
 	
-	public boolean acceptPlacement() {
+
+	public InternshipApplication acceptPlacement() {
 		
 		// checks if application is Successful AND not been accepted yet by student
 		if(status.equalsIgnoreCase("Successful") && !accepted) {
@@ -95,12 +96,12 @@ public class InternshipApplication  {
 			}
 			
 			// returns true when placement is accepted
-			return true;
+			return this;
 			
 		}
 		
-		// returns false when application is not successful
-		return false;
+		// returns null when application is not successful
+		return null;
 	}
 	
 	public void setWithdrawalRequested(boolean isWithdraw) {
@@ -125,6 +126,10 @@ public class InternshipApplication  {
 	
 	public String getStatus() {
 		return this.status;
+	}
+	
+	public void setAccepted(boolean isAccepted) {
+		this.accepted = isAccepted;
 	}
 	
 	

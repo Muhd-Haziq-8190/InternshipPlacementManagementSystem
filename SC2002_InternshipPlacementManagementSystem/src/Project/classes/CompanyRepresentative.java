@@ -67,25 +67,27 @@ public class CompanyRepresentative extends User{
 	}
 	
 	
-	public boolean approveApplication(String applicationId) {
+	public InternshipApplication approveApplication(String applicationId) {
 		
 		// Loop through all internships created by Company Representative
 		for(int i = 0; i < this.internships.length; i++ ) {
 			Internship internship = internships[i];
 			InternshipApplication[] applications = internship.getInternshipApplications();
+			InternshipApplication application = null;
 			
 			// For each internship, loop through each applicant 
 			for(int j = 0; j < internship.getApplicationCount(); j++) {
 				
 				// Match the applicant ids and update their status to be successful
 				if(applications[j].getId().equals(applicationId)) {
+					application = applications[j];
 					applications[j].setStatus("Successful");
-					return true;
+					return application;
 				}
 			}
 		}
 		
-		return false;
+		return null;
 		
 	}
 	

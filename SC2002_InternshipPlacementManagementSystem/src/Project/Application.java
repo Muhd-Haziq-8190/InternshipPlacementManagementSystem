@@ -103,7 +103,7 @@ public class Application {
             //cardLayout.show(mainPanel, "admin");//管理员主页
             //cardLayout.show(mainPanel, "user"); //普通用户主页
             //JOptionPane.showMessageDialog(frame, "", "Error", JOptionPane.ERROR_MESSAGE);//登陆失败
-
+            
             // 清空输入框
             usernameField.setText("");
             passwordField.setText("");

@@ -14,9 +14,8 @@ public class DB_Testing {
     InternshipApplicationListReader appDb = new InternshipApplicationListReader("data", "internshipApplication_list.csv");
     StaffListReader staffDb = new StaffListReader("data", "staff_list.csv");
     StudentListReader studentDb = new StudentListReader("data", "student_list.csv");
-
+    
     public static void main(String[] args) {
-
         // ----------------------------
         // Initialize all readers
         // ----------------------------

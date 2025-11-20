@@ -273,21 +273,7 @@ public class InternshipApplicationListReader {
 
             System.out.println("After updating app2:");
             db.printAll();
-
-
-            // ---------------------------------------------------
-            // DELETE TEST (Optional)
-            // ---------------------------------------------------
-//             db.delete(app1.getId());
-//             System.out.println("\nAfter deleting app1:");
-//             db.printAll();
         }
-
-
-
-
-
-
 }
 
 
