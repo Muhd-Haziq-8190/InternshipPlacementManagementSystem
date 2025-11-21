@@ -1,1 +1,11 @@
 id,username,password,type,index
+U1234567A,U1234567A,password,student,U1234567A
+U2345678B,U2345678B,password,student,U2345678B
+U2423123F,U2423123F,password,student,U2423123F
+U2423F,U2423F,password,student,U2423F
+STF001,STF001,password,staff,STF001
+STF002,STF002,password,staff,STF002
+alice@google.com,alice@google.com,password,company,alice@google.com
+bob@amazon.com,bob@amazon.com,password,company,bob@amazon.com
+basdob@asd.com,basdob@asd.com,password,company,basdob@asd.com
+asd@asd.com,asd@asd.com,password,company,asd@asd.com

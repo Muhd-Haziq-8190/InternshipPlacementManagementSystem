@@ -22,22 +22,26 @@ public class CareerStaff extends User{
 		companyRep.setAccountStatus(approve ? "Approved" : "Rejected");
 		return true;
 	}
-	
-	public void approveWithdrawal(Student student, InternshipApplication application) {
-		Internship internship = application.getInternship();
-		
-		// if student already accepted this internship, undo acceptance
-		if(student.getAcceptedPlacement() == application) {
-			student.setAcceptedPlacement(null);
-			internship.releaseSlot();
-		}
-		
-		// withdrawal approved, remove it from student's application list
-		student.removeApplication(application);
-		internship.removeApplication(application);
-		application.setWithdrawalRequested(false);
-	}
-	
+
+    public void approveWithdrawal(Student student, InternshipApplication application) {
+        Internship internship = application.getInternship();
+
+        // if student already accepted this internship, undo acceptance
+        if(student.getAcceptedPlacement() == application) {
+            student.setAcceptedPlacement(null);
+            internship.releaseSlot();
+        }
+
+        // withdrawal approved, remove it from student's application list
+        student.removeApplication(application);
+        internship.removeApplication(application);
+        application.setWithdrawalRequested(false);
+        application.setWithdrawAccepted(true);
+
+
+        application.setStatus("Withdrawn");
+    }
+
 	public void rejectWithdrawal(InternshipApplication application) {
 		application.setWithdrawalRequested(false);
 	}

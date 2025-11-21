@@ -1,4 +1,4 @@
-InternshipApplicationID,StudentID,InternshipID,Status,isAccepted,withdrawalRequested
-APP1,U1234567A,INT1,Pending,FALSE,FALSE
-APP2,U2345678B,INT2,Pending,FALSE,FALSE
-APP3,U2423123F,INT1,Successful,true,false
+InternshipApplicationID,StudentID,InternshipID,Status,isAccepted,withdrawalRequested,withdrawAccepted
+APP1,U1234567A,INT1,Successful,FALSE,FALSE,TRUE
+APP2,U2345678B,INT2,Pending,FALSE,FALSE,FALSE
+APP3,U2423123F,INT1,Successful,TRUE,FALSE,FALSE

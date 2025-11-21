@@ -65,31 +65,31 @@ public class CompanyRepresentative extends User{
 	    }
 		return internship;
 	}
-	
-	
-	public InternshipApplication approveApplication(String applicationId) {
-		
-		// Loop through all internships created by Company Representative
-		for(int i = 0; i < this.internships.length; i++ ) {
-			Internship internship = internships[i];
-			InternshipApplication[] applications = internship.getInternshipApplications();
-			InternshipApplication application = null;
-			
-			// For each internship, loop through each applicant 
-			for(int j = 0; j < internship.getApplicationCount(); j++) {
-				
-				// Match the applicant ids and update their status to be successful
-				if(applications[j].getId().equals(applicationId)) {
-					application = applications[j];
-					applications[j].setStatus("Successful");
-					return application;
-				}
-			}
-		}
-		
-		return null;
-		
-	}
+
+
+    public InternshipApplication approveApplication(String applicationId) {
+
+        // Loop through all internships created by Company Representative
+        for(int i = 0; i < this.internships.length; i++ ) {
+            Internship internship = internships[i];
+            if (internship == null) continue;
+
+            InternshipApplication[] applications = internship.getInternshipApplications();
+
+            // For each internship, loop through each applicant
+            for(int j = 0; j < internship.getApplicationCount(); j++) {
+                if (applications[j] == null) continue;
+
+                // Match the applicant ids and update their status to be successful
+                if(applications[j].getId().equals(applicationId)) {
+                    applications[j].setStatus("Successful");
+                    return applications[j];
+                }
+            }
+        }
+
+        return null;
+    }
 	
 	public String getInternshipIds() {
         
@@ -116,6 +116,36 @@ public class CompanyRepresentative extends User{
         
         return internshipIds;
 	}
+	
+	public String toString() {
+	    StringBuilder sb = new StringBuilder();
+
+	    sb.append("Company Representative Details:\n");
+	    sb.append("ID: ").append(getId()).append("\n");
+	    sb.append("Name: ").append(getName()).append("\n");
+	    sb.append("Company: ").append(companyName).append("\n");
+	    sb.append("Department: ").append(department).append("\n");
+	    sb.append("Position: ").append(position).append("\n");
+	    sb.append("Account Status: ").append(accountStatus).append("\n");
+	    sb.append("Internship Count: ").append(internshipCount).append("\n");
+
+	    sb.append("Internships: ");
+	    if (internships == null || internshipCount == 0) {
+	        sb.append("None");
+	    } else {
+	        boolean first = true;
+	        for (Internship i : internships) {
+	            if (i != null) {
+	                if (!first) sb.append(", ");
+	                sb.append(i.getId());
+	                first = false;
+	            }
+	        }
+	    }
+
+	    return sb.toString();
+	}
+
 	
 	// --------- GETTER & SETTER --------- //
 	

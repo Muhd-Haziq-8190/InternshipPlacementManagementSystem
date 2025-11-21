@@ -27,6 +27,9 @@ public class DatabaseLoader {
     private InternshipApplicationListReader applicationDb= new InternshipApplicationListReader("data", "internshipApplication_list.csv");
     private StaffListReader careerStaffDb = new StaffListReader("data", "staff_list.csv");
 	
+    public DatabaseLoader() {
+    	
+    }
 
 //    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
     
@@ -98,7 +101,7 @@ public class DatabaseLoader {
     
     // InternshipApplication
     public void insertInternshipApplication(InternshipApplication internshipApplication) throws IOException {
-    	applicationDb.insert(internshipApplication);
+        applicationDb.insert(internshipApplication);
     	loadAllData();
     }
     
@@ -305,6 +308,22 @@ public class DatabaseLoader {
         return filteredApplications;
     }
 
+    public List<InternshipApplication> getApplicationWithdrawal(boolean withdrawalRequest) {
+        List<InternshipApplication> filteredApplications = new ArrayList<>();
+        for (InternshipApplication app : applications.values()) {
+            // 只显示已请求撤回但尚未被同意的申请
+            if (app.isWithdrawalRequested() == withdrawalRequest && !app.isWithdrawAccepted()) {
+                filteredApplications.add(app);
+            }
+        }
+
+        if(filteredApplications.size() <= 0) {
+            System.out.println("No withdrawal requests found.");
+        }
+
+        return filteredApplications;
+    }
+    
     public List<InternshipApplication> getApplicationsByInternship(String internshipId) {
         List<InternshipApplication> filteredApplications = new ArrayList<>();
         for (InternshipApplication app : applications.values()) {
@@ -343,7 +362,6 @@ public class DatabaseLoader {
             	filteredCareerStaff.add(careerStaff);
             }
         }
-        
         if(filteredCareerStaff.size() <= 0) {
         	System.out.println("No career staffs found by this department.");
         }
@@ -351,17 +369,24 @@ public class DatabaseLoader {
         return filteredCareerStaff;
     }
 
+    public List<Internship> getInternshipsByCompanyRep(String repId) {
+        List<Internship> filteredInternships = new ArrayList<>();
+        for (Internship i : internships.values()) {
+            if (i.getCompanyRepresentativeId().equals(repId)) {
+                filteredInternships.add(i);
+            }
+        }
+
+        if(filteredInternships.size() <= 0) {
+            System.out.println("No internships found for this company representative.");
+        }
+
+        return filteredInternships;
+    }
 
     // --------- MAIN LOADING METHOD ---------
     public void loadAllData() throws IOException {
-    	 
-    	
-//    	List<String[]> studentData = new StudentListReader("data", "student_list.csv").readWithoutHeader();
-//        List<String[]> companyRepData = new CompanyListReader("data", "company_list.csv").readWithoutHeader();
-//        List<String[]> internshipData = new InternshipListReader("data", "internship_list.csv").readWithoutHeader();
-//        List<String[]> applicationData = new InternshipApplicationListReader("data", "internshipApplication_list.csv").readWithoutHeader();
-//        List<String[]> careerStaffData = new StaffListReader("data", "staff_list.csv").readWithoutHeader();
-    	
+
         List<String[]> studentData = studentDb.readWithoutHeader();
         List<String[]> companyRepData = companyRepDb.readWithoutHeader();
         List<String[]> internshipData = internshipDb.readWithoutHeader();
@@ -396,6 +421,7 @@ public class DatabaseLoader {
         }
 
         // reconstruct CompanyRepresentatives obj
+        
         for (String[] row : companyRepData) {
             String id = row[0];
             String company = row[1];
@@ -403,7 +429,10 @@ public class DatabaseLoader {
             String dept = row[3];
             String position = row[4];
             String status = row[5];
-            int internshipCount = Integer.parseInt(row[7]);
+            int internshipCount = 0;
+            if (row.length > 7 && !row[7].isEmpty()) {
+                internshipCount = Integer.parseInt(row[7]);
+            }
 //            companyReps.put(id, new CompanyRepresentative(id, name, company, dept, position, status, new Internship[5], 0));
             companyReps.put(id, new CompanyRepresentative(id, name, company, dept, position, status, new Internship[5], internshipCount));
 
@@ -448,123 +477,63 @@ public class DatabaseLoader {
             String studentId = row[1];
             String internshipId = row[2];
             String status = row[3];
-            boolean accepted = Boolean.parseBoolean(row[4]);
-            boolean withdrawalRequested = Boolean.parseBoolean(row[5]);
+            boolean accepted = "TRUE".equalsIgnoreCase(row[4]);
+            boolean withdrawalRequested = "TRUE".equalsIgnoreCase(row[5]);
+
+            // 处理 withdrawAccepted 字段，确保向后兼容
+            boolean withdrawAccepted = false;
+            if (row.length > 6) {
+                withdrawAccepted = "TRUE".equalsIgnoreCase(row[6]);
+            }
 
             Student student = students.get(studentId);
             Internship internship = internships.get(internshipId);
 
             if (student != null && internship != null) {
-                InternshipApplication application = new InternshipApplication(id, student, internship, status, accepted, withdrawalRequested);
+                // 使用新的构造方法，包含 withdrawAccepted 参数
+                InternshipApplication application = new InternshipApplication(id, student, internship, status, accepted, withdrawalRequested, withdrawAccepted);
 
                 // Add to maps
                 applications.put(id, application);
 
-                // Link student
-                if (student.getInternshipApplications()[0] == null) {
-                    student.getInternshipApplications()[0] = application;
-                    student.setAcceptedPlacement(accepted ? application : student.getAcceptedPlacement());
-                } else {
-                    for (int i = 0; i < student.getInternshipApplications().length; i++) {
-                        if (student.getInternshipApplications()[i] == null) {
-                            student.getInternshipApplications()[i] = application;
-                            break;
-                        }
+                // Link student - 修复这里的逻辑
+                boolean linkedToStudent = false;
+                for (int i = 0; i < student.getInternshipApplications().length; i++) {
+                    if (student.getInternshipApplications()[i] == null) {
+                        student.getInternshipApplications()[i] = application;
+                        linkedToStudent = true;
+                        break;
                     }
+                }
+
+                // 如果申请被接受，设置 acceptedPlacement
+                if (accepted) {
+                    student.setAcceptedPlacement(application);
                 }
 
                 // Link internship
                 internship.addApplication(application);
+                updateStudentApplicationCount(student);
             }
         }
     }
-    
-    public static void main(String[] args) throws IOException {
-        DatabaseLoader loader = new DatabaseLoader();
-        loader.loadAllData();
-        
-        // creating new student
-//        loader.insertStudent(new Student("U2423F", "John", 1, "Computer Engineering", "test123@hotmail.com"));
-        
-        // retrieving student by id
-        Student a = loader.getStudentById("U2423123F");
-//        System.out.println(a.getId());
-//        System.out.println(a.getName());
-//        System.out.println(a.getEmail());
-        
-        // retrieve internship
-        // apply for internship
-        // -> new entry
-        // -> Internship .csv entry must be updated to add new InternshipApplication linked to that Internship
-        // -> Student .csv entry must be updated to add new InternshipApplication to that Student
-        // -> Reload data
-        Internship internship = loader.getInternshipById("INT1");
-//        loader.insertInternshipApplication(a.applyTo(internship));
-//        loader.updateInternship(internship);
-//        loader.updateStudent(a);
-        loader.loadAllData();
-        
-        CompanyRepresentative companyRep = loader.getCompanyRepById("alice@google.com");
-        InternshipApplication application = loader.getApplicationById("APP3");
-        System.out.println(companyRep.getCompanyName());
-        
-        
-        loader.updateInternshipApplication(companyRep.approveApplication(application.getId()));
-        
-        loader.updateInternshipApplication(a.acceptInternship(application));
-        loader.updateStudent(a);
-        loader.updateInternship(application.getInternship());
-        
-        
-        // load all data, create respective objects
-//        loader.loadAllData(studentsCsv, repsCsv, internshipsCsv, applicationsCsv, staffCsv);
-        
-        // Test output
-//        Student s = loader.getStudentById("STU001");
-//        Student s = loader.getStudentById("U2345678B");
-//        System.out.println(s.getApplicationIds());
-//
-//        CompanyRepresentative rep = loader.getCompanyRepById("bob@amazon.com");
-//        System.out.println(rep.getInternshipIds());
-//        System.out.println(rep.getInternships()[1].getTitle());
-//        
-//        Internship inter = loader.getInternshipById("INT1");
-//        System.out.println(inter.getInternshipApplications()[0].getStudent().getEmail());
-//        System.out.println(inter.getCompanyRepresentative().getInternshipIds());
-//        
-//        
-//        List<Internship> internships = loader.getInternshipsByCompany("Amazon");
-//        System.out.println("\n\n"+ internships.size());
-//        
-//        for(Internship i : internships) {
-//        	System.out.println(i.getId());
-//        	System.out.println(i.getCompanyName());
-//        	System.out.println(i.getCompanyRepresentative().getPassword());
-//        	
-//        }
-//        
-//        List<CareerStaff> careerStaffs = loader.getAllCareerStaff();
-//        for(CareerStaff cs : careerStaffs) {
-//        	System.out.println(cs);
-//        	System.out.println(cs.getId());
-//        	System.out.println(cs.getName());
-//        	System.out.println(cs.getRole());
-//        	System.out.println(cs.getDepartment());
-//        }
-//        
-//        List<CareerStaff> careerStaffs1 = loader.getCareerStaffByRole("Advisor");
-//        for(CareerStaff cs : careerStaffs1) {
-//        	System.out.println(cs);
-//        	System.out.println(cs.getId());
-//        	System.out.println(cs.getName());
-//        	System.out.println(cs.getRole());
-//        	System.out.println(cs.getDepartment());
-//        }
-        
-        
 
+    private void updateStudentApplicationCount(Student student) {
+        int count = 0;
+        for (InternshipApplication app : student.getInternshipApplications()) {
+            if (app != null) count++;
+        }
+
+        // 使用反射设置 applicationCount，因为它是一个私有字段
+        try {
+            java.lang.reflect.Field field = Student.class.getDeclaredField("applicationCount");
+            field.setAccessible(true);
+            field.set(student, count);
+        } catch (Exception e) {
+            System.out.println("Error setting application count for student: " + e.getMessage());
+        }
     }
 
-    
+
     
 }

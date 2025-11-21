@@ -71,38 +71,39 @@ public class Internship {
     
     
     // checks if current internship is available for display for specified student
+// checks if current internship is available for display for specified student
     public boolean isOpenFor(Student s) {
-    	// if internship visibility is not enabled at all
-    	if (!this.visibility) {
-    		System.out.println("Internship Class, isOpenFor() method: visibility False");
-        	return false;
+        // if internship visibility is not enabled at all
+        if (!this.visibility) {
+            System.out.println("Internship Class, isOpenFor() method: visibility False");
+            return false;
         }
-    	
-    	// if status of internship status is still Pending, Rejected, or Filled
+
+        // if status of internship status is still Pending, Rejected, or Filled
         if (!status.equalsIgnoreCase("Approved")) {
-        	System.out.println("Internship Class, isOpenFor() method: status field not \"Approved\"");
-        	return false;
+            System.out.println("Internship Class, isOpenFor() method: status field not \"Approved\"");
+            return false;
         }
-        
+
         // if the current date is within duration that internship is open
         LocalDate now = LocalDate.now();
         if (now.isBefore(openDate) || now.isAfter(closeDate)) {
-        	System.out.println("Internship Class, isOpenFor() method: Date outside open-close duration");
-        	return false;
+            System.out.println("Internship Class, isOpenFor() method: Date outside open-close duration");
+            return false;
         }
-        
+
         // if current student is eligible based on their year
         if (!s.canApplyForLevel(level)) {
-        	System.out.println("Internship Class, isOpenFor() method: Student is not at appropriate Level");
-        	return false;
+            System.out.println("Internship Class, isOpenFor() method: Student is not at appropriate Level");
+            return false;
         }
-        
+
         // if current student matches the preferred major of the internship requirements
         if (!preferredMajor.equalsIgnoreCase(s.getMajor())) {
-        	System.out.println("Internship Class, isOpenFor() method: Student is not in Preferred Major");
-        	return false;
+            System.out.println("Internship Class, isOpenFor() method: Student is not in Preferred Major");
+            return false;
         }
-        
+
         // returns true if meets above conditions and there is enough slots available
         return slotsAvailable > 0;
     }
@@ -183,6 +184,41 @@ public class Internship {
         
         return internshipIds;
 	}
+	 
+	 public String toString() {
+	 StringBuilder sb = new StringBuilder();
+		 sb.append("Internship Details:\n");
+		 sb.append("ID: ").append(id).append("\n");
+		 sb.append("Title: ").append(title).append("\n");
+		 sb.append("Description: ").append(description).append("\n");
+		 sb.append("Level: ").append(level).append("\n");
+		 sb.append("Preferred Major: ").append(preferredMajor).append("\n");
+		 sb.append("Open Date: ").append(openDate).append("\n");
+		 sb.append("Close Date: ").append(closeDate).append("\n");
+		 sb.append("Company Name: ").append(companyName).append("\n");
+		 sb.append("Company Representative: ").append(companyRep != null ? companyRep.getName() : "N/A").append("\n");
+		 sb.append("Status: ").append(status).append("\n");
+		 sb.append("Slots Available: ").append(slotsAvailable).append("\n");
+		 sb.append("Visibility: ").append(visibility ? "Visible" : "Hidden").append("\n");
+		 sb.append("Applications: " );
+	
+		 if (applicationCount == 0) {
+		     sb.append("None");
+		 } else {
+		     boolean first = true;
+			 for (InternshipApplication app : internAppli) {
+		         if (app != null) {
+		                if (!first) sb.append(", ");
+		                sb.append(app.getId());
+		                first = false;
+		         }
+		     }
+		 }
+	
+		 return sb.toString();
+
+	 }
+
 	
 	// --------- GETTER & SETTER --------- //
 	

@@ -41,28 +41,53 @@ public class Student extends User {
         return true;  // else they are year 3, who can apply for all levels
     }
 
-	// applies for internship if condition met
-	public InternshipApplication applyTo(Internship internship) {
-		
-		// can only apply for max 3 internships
-		// does not apply if at capacity
-		if(this.applicationCount >= 3) {
-			System.out.println("Student Class, applyTo() method: applicationCount >= 3");			
-			return null;
-		}
-		
-		// internship is not open or student is not eligible
-		if(!internship.isOpenFor(this)) {
-			System.out.println("Student Class, isOpenFor() method: Student not eligible");
-			return null;
-		}
-		
-		InternshipApplication appli = new InternshipApplication(this, internship);
-		internAppli[applicationCount++] = appli; // updates student's application list and count
-		internship.addApplication(appli); // updates respective internship with application information
-		return appli;
-		 
-	}
+    // applies for internship if condition met
+    public InternshipApplication applyTo(Internship internship) {
+
+        // 检查是否已经申请过这个实习（排除已撤回的申请）
+        for (int i = 0; i < applicationCount; i++) {
+            if (internAppli[i] != null &&
+                    internAppli[i].getInternship().getId().equals(internship.getId()) &&
+                    !internAppli[i].isWithdrawAccepted()) {  // 已撤回的申请不算
+                System.out.println("Student Class, applyTo() method: Already applied to this internship");
+                return null;
+            }
+        }
+
+        // 检查实习是否已经批准
+        if (!"Approved".equals(internship.getStatus())) {
+            System.out.println("Student Class, applyTo() method: Internship is not approved yet");
+            return null;
+        }
+
+        // 检查实习是否已满
+        if (internship.getSlotsAvailable() <= 0) {
+            System.out.println("Student Class, applyTo() method: Internship is filled");
+            return null;
+        }
+
+        // can only apply for max 3 internships
+        // does not apply if at capacity
+        if(this.applicationCount >= 3) {
+            System.out.println("Student Class, applyTo() method: applicationCount >= 3");
+            return null;
+        }
+
+        // internship is not open or student is not eligible
+        if(!internship.isOpenFor(this)) {
+            System.out.println("Student Class, isOpenFor() method: Student not eligible");
+            return null;
+        }
+
+        InternshipApplication appli = new InternshipApplication(this, internship);
+        internAppli[applicationCount++] = appli; // updates student's application list and count
+        internship.addApplication(appli); // updates respective internship with application information
+
+        // 确保申请状态是"Pending"
+        appli.setStatus("Pending");
+
+        return appli;
+    }
 	
 	
 	// Display all internship title and companyName of each Internship Application
@@ -75,21 +100,20 @@ public class Student extends User {
 		}
 	
 	}
-	
-	
+
+
 	// Remove an existing application by student
-	public void removeApplication(InternshipApplication appli) {
-		
-		for (int i = 0; i < applicationCount; i++) {
-			if(internAppli[i] == appli) {
-				for(int j = i; j < applicationCount - 1; j++) {
-					internAppli[j] = internAppli[j+1];
-				}
-				internAppli[--applicationCount] = null;
-				break;
-			}
-		}
-	}
+    public void removeApplication(InternshipApplication appli) {
+        for (int i = 0; i < applicationCount; i++) {
+            if(internAppli[i] == appli) {
+                for(int j = i; j < applicationCount - 1; j++) {
+                    internAppli[j] = internAppli[j+1];
+                }
+                internAppli[--applicationCount] = null;
+                break;
+            }
+        }
+    }
 	
 	public boolean requestWithdrawal(InternshipApplication application) {
 		// ensure that application student wants to withdraw exists
@@ -173,6 +197,19 @@ public class Student extends User {
 	    
 	    return application;
 	}
+
+    public void setInternshipApplication(InternshipApplication application, int index) {
+        if (index >= 0 && index < internAppli.length) {
+            internAppli[index] = application;
+            if (application != null && index >= applicationCount) {
+                applicationCount = index + 1;
+            }
+        }
+    }
+
+
+
+
 	
 	// --------- GETTER & SETTER --------- //
 	
